@@ -1,6 +1,6 @@
 export(author_course, 
        preview_chapter, 
-       datamind_login, 
+       datacamp_login, 
        upload_chapter,
        upload_course); 
 

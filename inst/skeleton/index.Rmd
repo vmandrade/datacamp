@@ -2,7 +2,7 @@
 courseTitle       : Insert the course title here
 chapterTitle      : Insert the chapter title here
 description       : What is this chapter about? Add here your description
-framework : datamind
+framework : datacamp
 mode: selfcontained
 --- 
 
@@ -10,7 +10,7 @@ mode: selfcontained
   1. Complete YAML front matter above
   2. Write using R Markdown (http://en.wikipedia.org/wiki/Markdown)
   3. Use an empty line followed by three dashes to separate exercises!
-  4. Consult the documentation at: http://www.datamind.org/#/CC/help if you're stuck
+  4. Consult the documentation at: http://www.datacamp.com/teach/help if you're stuck
 # END READ-AND-DELETE
 
 ## The title of the first exercise

@@ -1,6 +1,6 @@
-# Goal: have as little functions as possible a teacher has to use to create and upload a chapter to datamind 
+# Goal: have as little functions as possible a teacher has to use to create and upload a chapter to datacamp 
 # Extra functionality will be added in a later phase. 
-# Feel free to contribute or just email suggestions at jonathan@datamind.org! 
+# Feel free to contribute or just email suggestions at jonathan@datacamp.com! 
 
 # 1. Author chapter:
 author_course = function(chapdir, ...){
@@ -8,7 +8,7 @@ author_course = function(chapdir, ...){
   message("Finished creating course directory...");
   message("Switching to course directory...");
   message("Initializing Git Repo");
-  suppressMessages(author(deckdir=chapdir,  scaffold = system.file('skeleton', package = 'datamind'), ...) );
+  suppressMessages(author(deckdir=chapdir,  scaffold = system.file('skeleton', package = 'datacamp'), ...) );
   message(paste0("Opening first chapter..."));
 }
 
@@ -23,26 +23,26 @@ preview_chapter = function(inputFile,outputFile,...){
   browseURL(outputFile)
 }
 
-# 3. Log in to DataMind:
-datamind_login = function(email, password){
-  url = paste0("http://api.datamind.org/users/details.json?email=",email,"&password=",password)
+# 3. Log in to datacamp:
+datacamp_login = function(email, password){
+  url = paste0("http://api.datacamp.com/users/details.json?email=",email,"&password=",password)
   message("Logging in...");
   if(url.exists(url)){
     getURL(url)
     content = getURLContent(url)
     auth_token = fromJSON(content)$authentication_token;
-    .DATAMIND_ENV <<- new.env();
-    .DATAMIND_ENV$auth_token <- auth_token;    
-    .DATAMIND_ENV$email <- email;    
-    message("Logged in successfully to DataMind.org with R! Make sure to log in with your browser to DataMind.org as well using the same account.")
-  }else{stop("Wrong user name  or password for DataMind.org.")} 
+    .DATACAMP_ENV <<- new.env();
+    .DATACAMP_ENV$auth_token <- auth_token;    
+    .DATACAMP_ENV$email <- email;    
+    message("Logged in successfully to datacamp.com with R! Make sure to log in with your browser to datacamp.com as well using the same account.")
+  }else{stop("Wrong user name  or password for datacamp.com.")} 
 }
 
 # 4. Upload chapter:
 upload_chapter = function( inputFile, open=TRUE, ... ){ 
   # not efficient, needs refactoring
   payload = suppressWarnings(slidify(inputFile, return_page=TRUE,...));  # Get the payload  
-  theJSON = render_chapter_json_for_datamind(payload); # Get the JSON
+  theJSON = render_chapter_json_for_datacamp(payload); # Get the JSON
   upload_chapter_json(theJSON,open=open); # Upload everything
 } 
 
@@ -73,24 +73,24 @@ upload_course = function(open=TRUE){
 
 ##### HELP FUNCTIONS ##### 
 upload_chapter_json = function(theJSON, open=TRUE){ 
-  if(!exists(".DATAMIND_ENV")){
-    stop("Please login to DataMind first, using the datamind_login function");    
+  if(!exists(".DATACAMP_ENV")){
+    stop("Please login to datacamp first, using the datacamp_login function");    
   } 
-  base_url     = "http://api.datamind.org/chapters/create_from_r.json";
-  redirect_url = "http://www.datamind.org/#/edit_course/";
-  auth_token = .DATAMIND_ENV$auth_token;    
+  base_url     = "http://api.datacamp.com/chapters/create_from_r.json";
+  redirect_url = "http://www.datacamp.com/edit_course/";
+  auth_token = .DATACAMP_ENV$auth_token;    
   url = paste0(base_url,"?auth_token=", auth_token);
   
   x = try(httr:::POST(url = url, body = theJSON, add_headers(`Content-Type` = "application/json")))
   if( class(x) != "response" ){
-    stop("Something went wrong. We didn't get a valid response from the DataMind server. Try again or contact info@datamind.org in case you keep experiencing this problem.")
+    stop("Something went wrong. We didn't get a valid response from the datacamp server. Try again or contact info@datacamp.com in case you keep experiencing this problem.")
   } else { 
     if(is.list(content(x)) ){ 
       if("course" %in% names(content(x)) ){  
         course = content(x)$course
         course_id = course$id
         course_title = course$title
-        message(paste0("Course (id:",course_id,"):\n",course_title,"\nwas successfully uploaded to DataMind.org!"))
+        message(paste0("Course (id:",course_id,"):\n",course_title,"\nwas successfully uploaded to datacamp.com!"))
         redirect_url = paste0(redirect_url, course_id)
         if (open) {
           browseURL(redirect_url)
@@ -103,35 +103,35 @@ upload_chapter_json = function(theJSON, open=TRUE){
         message(paste0("Something went wrong:\n", content(x)$error ));
       } 
     } else {
-      message(paste0("Something went wrong. Please check whether your course was correctly uploaded to DataMind.org."));
+      message(paste0("Something went wrong. Please check whether your course was correctly uploaded to datacamp.com."));
     } 
   } 
 }
 
 upload_course_json = function(theJSON, open=TRUE){ 
-  if(!exists(".DATAMIND_ENV")){
-    stop("Please login to DataMind first, using the datamind_login function");    
+  if(!exists(".DATACAMP_ENV")){
+    stop("Please login to datacamp first, using the datacamp_login function");    
   } 
-  base_url     = "http://api.datamind.org/courses/create_from_r.json";
-  redirect_url = "http://www.datamind.org/#/edit_course/";
-  auth_token = .DATAMIND_ENV$auth_token;    
+  base_url     = "http://api.datacamp.com/courses/create_from_r.json";
+  redirect_url = "http://www.datacamp.com/edit_course/";
+  auth_token = .DATACAMP_ENV$auth_token;    
   url = paste0(base_url,"?auth_token=", auth_token);
   
   x = httr:::POST(url=url, body = theJSON, add_headers("Content-Type" = "application/json"))   
   course_id = content(x)$id;
-  message("Course succesfully uploaded to DataMind.org");
+  message("Course succesfully uploaded to datacamp.com");
   redirect_url = paste0(redirect_url,course_id);
   if (open){ browseURL(redirect_url) }
 }
 
-render_chapter_json_for_datamind = function(payload){
-  if(!exists(".DATAMIND_ENV")){
-    stop("Please login to DataMind first, using the datamind_login function");    
+render_chapter_json_for_datacamp = function(payload){
+  if(!exists(".DATACAMP_ENV")){
+    stop("Please login to datacamp first, using the datacamp_login function");    
   }
 
   # Extract basic course and chapter info: 
   outputList = list(course = payload$courseTitle, 
-                    email  = .DATAMIND_ENV$email,
+                    email  = .DATACAMP_ENV$email,
                     chapter=list(
                       description=payload$description, 
                       number=0,

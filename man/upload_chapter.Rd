@@ -1,8 +1,8 @@
 \name{upload_chapter} 
 \alias{upload_chapter} 
-\title{Upload a chapter to www.datamind.org} 
+\title{Upload a chapter to www.datacamp.com} 
 \description{ 
-Before calling this function you should have logged into datamind.org with \code{\link{datamind_login}} function. The function parses the chapter using the \code{slidify} function, then upload the result to datamind.org and shows you 
+Before calling this function you should have logged into datacamp.com with \code{\link{datacamp_login}} function. The function parses the chapter using the \code{slidify} function, then upload the result to datacamp.com and shows you 
 } 
 
 \usage{ 
