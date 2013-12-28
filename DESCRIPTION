@@ -4,8 +4,8 @@ Title: Easily create interactive courses for datacamp.com with R Markdown
 Version: 0.1 
 Date: 2013-09-07
 Author: Jonathan Cornelissen and Ramnath Vaidyanathan 
-Maintainer: Jonathan Cornelissen <Jonathan@datacamp.org>
-Description: This package makes it easy and fun to create interactive courses for www.datacamp.org. Use R Markdown (and the slidify style) documents to write exercises. Easily add interactivity with build-in functionality to write simple Submission Correctness Tests.
+Maintainer: Jonathan Cornelissen <Jonathan@datacamp.com>
+Description: This package makes it easy and fun to create interactive courses for www.datacamp.com. Use R Markdown (and the slidify style) documents to write exercises. Easily add interactivity with build-in functionality to write simple Submission Correctness Tests.
 License: MIT 
 URL: www.datacamp.com 
 Depends:
